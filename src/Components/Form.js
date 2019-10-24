@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect}from 'react';
 import { DatePicker, Button, Form, Input,InputNumber,Select, Icon } from 'antd';
+
 
 
 const {Option} = Select;
@@ -11,25 +12,22 @@ function hasErrors(fieldsError) {
 const children = [];
 const predefinedHobbies = ['movies', 'cooking', 'reading', 'travelling', 'cycling', 'swimming'];
 
+//populate the select options with predefined hobbies
 predefinedHobbies.forEach(hobby => {
   children.push(<Option key={hobby}>{hobby}</Option>)
 });
 
-class UserInput extends React.Component{ 
-  // eslint-disable-next-line no-useless-constructor
-  constructor(props){
-    super(props);
-  }
-  
-  componentDidMount() {
-    // To disabled submit button at the beginning.
-    this.props.form.validateFields();
-  }
-
-  
+const UserInput = (props) => { 
  
-  render() {
-    const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+ // mute the submit button only on the first render
+  useEffect(() => {
+    console.log('effect fires')
+    props.form.validateFields();
+    // eslint-disable-next-line
+  }, []);
+ 
+
+    const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = props.form;
 
     // Only show error after a field is touched.
     const firstNameError = isFieldTouched('first name') && getFieldError('first name');
@@ -40,7 +38,7 @@ class UserInput extends React.Component{
     return (
       <div style={{margin: "0 auto"}}>
          <h3>User Form</h3>
-        <Form layout="vertical" onSubmit={(e) => this.props.handleSubmit(e,this.props)}>
+        <Form layout="vertical" onSubmit={(e) => props.onSubmit(e,props)}>
           <Form.Item validateStatus={firstNameError ? 'error' : ''} help={firstNameError || ''}>
             {getFieldDecorator('first name', {
               rules: [{ required: true, message: 'Please input your First Name!'}],
@@ -70,7 +68,7 @@ class UserInput extends React.Component{
               <DatePicker
                 placeholder="Birthday"
                 style = {{width: '100%'}}
-                onChange = {(date, dateString) => this.props.onChangeHandler(date, dateString)}
+                onChange = {(date, dateString) => props.onDateChange(date, dateString)}
               />,
             )}
           </Form.Item>
@@ -105,14 +103,14 @@ class UserInput extends React.Component{
             </Button>
           </Form.Item>
         </Form>
-        <Button type = 'primary' onClick={this.props.onClickHandler}>
+        <Button type = 'primary' onClick={() => props.onPageSwitch()}>
           User Table
           <Icon type ="right"/>
         </Button>
         </div>
     );
   }
-}
+
 const UserInputForm = Form.create({ name: 'horizontal_login' })(UserInput); 
 
 export default UserInputForm;
