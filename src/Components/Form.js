@@ -21,7 +21,6 @@ const UserInput = (props) => {
  
  // mute the submit button only on the first render
   useEffect(() => {
-    console.log('effect fires')
     props.form.validateFields();
     // eslint-disable-next-line
   }, []);

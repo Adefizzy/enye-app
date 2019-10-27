@@ -3,6 +3,14 @@ import React from 'react';
 
 export const columns = [
   {
+    title: 'User Id',
+    dataIndex: 'userId',
+    key: 'userId',
+  
+   
+    render: text => <strong>{text}</strong>,
+  },
+  {
     title: 'Name',
     dataIndex: 'name',
     key: 'name',

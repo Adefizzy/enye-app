@@ -4,19 +4,26 @@ import UserInputForm from './Form'
 import {Row, Col} from 'antd';
 import 'antd/dist/antd.css';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';
-import {keyIncrement} from './action/keyIncrement';
-import {switchToTable, switchPage} from './action/switchPage';
-import {updateUser} from './action/updateUser';
+import {switchPage} from './action/switchPage';
+// import {updateUser} from './action/updateUser';
 import {birthday} from './action/updateBirthday'
+import {createUser} from './action/createUser';
+// import {keyIncrement} from '../Components/action/keyIncrement';
+
+
 
 
 const App = (props) => {
  
   const formStatus = useSelector(state => state.formStatus),// the state of form status
         currentBirthday = useSelector(state => state.birthday),// the state of birthday in date string
-        key = useSelector(state => state.key), // the state of key
+        // key = useSelector(state => state.key), // the state of key
         currentUsers = useSelector(state => state.users, shallowEqual); // the state of array of current users
-  
+
+        for(let index = 1; index < currentUsers.length; index++){
+          currentUsers[index]['key'] = index;
+        }
+
   const dispatch = useDispatch(); // an instance of useDispatch
 
   /*
@@ -27,24 +34,22 @@ const App = (props) => {
     //birthday action is dispatched to the reducer in the store
     dispatch(birthday(date, dateString))
   }
-
-
+   
   /*
   @param submitHandler: a function to handle the submission of form in the userInputForm component
   */
   const submitHandler = (e, formProps) => {
     e.preventDefault();
     formProps.form.validateFields((err, values) => {
-      if (!err) {         
+      if (!err) {   
         let name = `${values['first name']} ${values['last name']}`;
         delete values['first name'];
         delete values['last name'];
         values['name'] = name;
-        values['birthday'] = currentBirthday
-        values['key'] = key;
-        dispatch(keyIncrement()); 
-        dispatch(switchToTable());
-        dispatch(updateUser(values));
+         values['birthday'] = currentBirthday
+        
+
+        dispatch(createUser(values));
       }
     });
   };
