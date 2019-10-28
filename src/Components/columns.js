@@ -6,16 +6,13 @@ export const columns = [
     title: 'User Id',
     dataIndex: 'userId',
     key: 'userId',
-  
-   
-    render: text => <strong>{text}</strong>,
+    render: userId => userId !== undefined ? userId.slice(24,) : " ",
+    
   },
   {
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-  
-   
     render: text => <strong>{text}</strong>,
   },
   {
@@ -38,13 +35,13 @@ export const columns = [
     dataIndex: 'hobby',
     
     
-    render: hobbies => (
+    render: hobby => (
       <span>
-        {hobbies.map(hobby => {
+        {hobby.map(hob => {
           let color = "#"+((1<<24)*Math.random()|0).toString(16);
           return (
-            <Tag color={color} key={hobby}>
-              {hobby.toLowerCase()}
+            <Tag color={color} key={hob}>
+              {hob.toLowerCase()}
             </Tag>
           );
         })}
